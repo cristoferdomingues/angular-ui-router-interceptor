@@ -1,0 +1,31 @@
+{
+  "name": "ng-ui-router-interceptor",
+  "version": "0.1.0",
+  "authors": [
+    "Marat Dreizin <marat.dreizin@gmail.com>"
+  ],
+  "description": "Angular UI Router Interceptor",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/mdreizin/ng-ui-router-interceptor"
+  },
+  "main": [
+    "dist/ng-ui-router-interceptor.js",
+    "dist/ng-ui-router-interceptor.min.js"
+  ],
+  "keywords": [
+    "angular",
+    "ui router",
+    "state interceptor",
+    "ui router interceptor"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/mdreizin/ng-ui-router-interceptor",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
