@@ -1,5 +1,5 @@
 {
-  "name": "ng-ui-router-interceptor",
+  "name": "angular-ui-router-interceptor",
   "private": true,
   "devDependencies": {
     "del": "^1.1.1",
