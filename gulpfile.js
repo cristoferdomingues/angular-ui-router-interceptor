@@ -62,6 +62,10 @@ gulp.task('build', [], function(callback) {
     runSequence('clean', ['lint', 'docs', 'bundle'], 'compress', callback);
 });
 
+gulp.task('ci', [], function(callback) {
+    runSequence('lint', callback);
+});
+
 gulp.task('default', function(callback) {
     runSequence('build', callback);
 });
