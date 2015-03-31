@@ -1,24 +1,41 @@
 'use strict';
 
 var path = require('path'),
-    fs = require('fs'),
     del = require('del'),
     gulp = require('gulp'),
     eslint = require('gulp-eslint'),
     uglify = require('gulp-uglify'),
     rename = require('gulp-rename'),
-    umdWrap = require('gulp-wrap-umd'),
+    webpack = require('gulp-webpack-build'),
     runSequence = require('run-sequence'),
     gitdown = require('gitdown');
 
 var src = './src/',
-    dist = './dist/',
-    umdTemplate = fs.readFileSync('./.gulp/umd.jst', 'utf-8'),
+    dest = './dist/',
     paths = {
         scripts: [
             path.join(src, '**/*.js'),
             'gulpfile.js'
         ]
+    },
+    webpackOptions = {
+        debug: true,
+        devtool: '#source-map',
+        output: {
+            pathinfo: true
+        }
+    },
+    webpackConfig = {
+        useMemoryFs: true,
+        progress: true
+    },
+    webpackFormat = {
+        version: false,
+        timings: true
+    },
+    webpackFailAfter = {
+        errors: true,
+        warnings: true
     };
 
 gulp.task('lint', function() {
@@ -28,7 +45,7 @@ gulp.task('lint', function() {
 });
 
 gulp.task('clean', function(callback) {
-    del([dist + '**/*.*'], callback);
+    del([dest + '**/*.*'], callback);
 });
 
 gulp.task('docs', ['gitdown']);
@@ -38,28 +55,26 @@ gulp.task('gitdown', function() {
 });
 
 gulp.task('compress', function() {
-    return gulp.src([dist + '**/*.js', '!' + dist + '**/*.min.js'])
+    return gulp.src([dest + '**/*.js', '!' + dest + '**/*.min.js'])
         .pipe(uglify())
         .pipe(rename({
             extname: '.min.js'
         }))
-        .pipe(gulp.dest(dist));
+        .pipe(gulp.dest(dest));
 });
 
-gulp.task('bundle', function() {
-    return gulp.src([src + '**/*.js'])
-        .pipe(umdWrap({
-            namespace: null,
-            template: umdTemplate,
-            deps: [{
-                name: 'angular', globalName: 'angular', paramName: 'angular'
-            }]
-        }))
-        .pipe(gulp.dest(dist));
+gulp.task('webpack', [], function() {
+    return gulp.src(path.join(src, '**', webpack.config.CONFIG_FILENAME), { base: path.resolve(src) })
+        .pipe(webpack.configure(webpackConfig))
+        .pipe(webpack.overrides(webpackOptions))
+        .pipe(webpack.compile())
+        .pipe(webpack.format(webpackFormat))
+        .pipe(webpack.failAfter(webpackFailAfter))
+        .pipe(gulp.dest(dest));
 });
 
 gulp.task('build', [], function(callback) {
-    runSequence('clean', ['lint', 'docs', 'bundle'], 'compress', callback);
+    runSequence('clean', ['lint', 'docs', 'webpack'], 'compress', callback);
 });
 
 gulp.task('ci', [], function(callback) {

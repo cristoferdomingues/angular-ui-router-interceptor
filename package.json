@@ -8,7 +8,9 @@
     "gulp-eslint": "^0.5.0",
     "gulp-rename": "^1.2.0",
     "gulp-uglify": "^1.1.0",
-    "gulp-wrap-umd": "^0.2.1",
-    "run-sequence": "^1.0.2"
+    "gulp-webpack-build": "^0.6.1",
+    "run-sequence": "^1.0.2",
+    "webpack": "^1.7.3",
+    "webpack-config": "^0.4.0"
   }
 }
